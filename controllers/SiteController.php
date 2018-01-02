@@ -137,8 +137,10 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionTest()
+    public function actionManagement()
     {
-        return $this->render('test');
+        return $this->render('management', [
+
+        ]);
     }
 }

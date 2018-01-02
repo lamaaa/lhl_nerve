@@ -11,21 +11,16 @@ use yii\bootstrap\Nav;
     <?= Nav::widget([
     'items' => [
         [
-            'label' => '药品统计',
-            'items' => [
-                [
-                    'label' => '药品清单',
-                    'url' => ['site/index']
-                ]
-            ]
+            'label' => '药品管理',
+            'url' => ['medicine/index']
         ],
         [
-            'label' => '药品管理',
-            'url' => ['site/index']
+            'label' => '药品统计',
+            'url' => ['medicine/statistics']
         ],
         [
             'label' => '系统管理',
-            'url' => ['site/index']
+            'url' => ['site/management']
         ]
     ],
     'options' => ['class' => 'flex-column nav-pills']
