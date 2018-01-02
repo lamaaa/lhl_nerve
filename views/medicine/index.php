@@ -37,6 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 'template' => '{release}{delete}',
+                                'contentOptions' => ['style' => 'width: 13%'],
                                 'buttons' => [
                                     'release' => function ($url, $model) {
                                         return Html::a('出库', $url, [

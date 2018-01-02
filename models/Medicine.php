@@ -56,4 +56,14 @@ class Medicine extends ActiveRecord
             'created_at' => '入库时间'
         ];
     }
+
+    public static function getNameById($id)
+    {
+        return Medicine::findOne($id)['medicine_name'];
+    }
+
+    public static function getSerialNumberById($id)
+    {
+        return Medicine::findOne($id)['serial_number'];
+    }
 }

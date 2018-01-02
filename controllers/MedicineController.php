@@ -8,8 +8,11 @@
 namespace app\controllers;
 
 use app\models\Medicine;
+use app\models\MedicineStatistics;
 use app\models\ReleaseMedicineForm;
+use app\models\User;
 use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
@@ -24,7 +27,7 @@ class MedicineController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'storage', 'release', 'delete'],
+                'only' => ['index', 'storage', 'release', 'delete', 'statistics'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -49,7 +52,7 @@ class MedicineController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => Medicine::find()->where(['status' => 1]),
             'pagination' => [
-                'pageSize' => 20
+                'pageSize' => 15
             ]
         ]);
 
@@ -64,30 +67,14 @@ class MedicineController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
+                if (!MedicineStatistics::record($model->id, $model->quantity, MedicineStatistics::STORAGE)) {
+                    throw new HttpException(500, "Server has a problem");
+                }
                 return $this->redirect(Url::toRoute('medicine/index'));
             }
         }
 
         return $this->render('storage', [
-            'model' => $model
-        ]);
-    }
-
-    public function actionUpdate($id)
-    {
-        $model = Medicine::findOne($id);
-
-        if (!$model) {
-            throw new HttpException(404, "您找的页面不见了！");
-        }
-
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                return $this->redirect(Url::toRoute('medicine/index'));
-            }
-        }
-
-        return $this->render('update', [
             'model' => $model
         ]);
     }
@@ -124,12 +111,46 @@ class MedicineController extends Controller
             $medicine = Medicine::findOne($id);
             $medicine->quantity = $medicine->quantity - $model->release_quantity;
             if ($medicine->update()) {
+                if (!MedicineStatistics::record($model->id, $model->release_quantity, MedicineStatistics::RELEASE)) {
+                    throw new HttpException(500, "Server has a problem");
+                }
                 return $this->redirect(Url::toRoute('medicine/index'));
             }
         }
 
         return $this->render('release', [
             'model' => $model
+        ]);
+    }
+
+    public function actionStatistics()
+    {
+        $rows = MedicineStatistics::find()->where([
+            'status' => 1
+        ])->all();
+        $records = [];
+
+        foreach ($rows as $row) {
+            $records[] = [
+                'medicine_name' => Medicine::getNameById($row['medicine_id']),
+                'quantity' => $row['quantity'],
+                'type' => $row['type'],
+                'created_at' => $row['created_at'],
+                'user' => User::getUsernameById($row['user_id']),
+                'serial_number' => Medicine::getSerialNumberById($row['medicine_id'])
+            ];
+        }
+        $dataProvider = new ArrayDataProvider(
+            [
+                'allModels' => $records,
+                'pagination' => [
+                    'pageSize' => 15
+                ],
+            ]
+        );
+
+        return $this->render('statistics', [
+            'dataProvider' => $dataProvider
         ]);
     }
 }

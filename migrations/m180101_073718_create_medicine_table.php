@@ -5,7 +5,7 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `medicine_record`.
  */
-class m180101_073718_create_medicine_record_table extends Migration
+class m180101_073718_create_medicine_table extends Migration
 {
     /**
      * @inheritdoc
@@ -25,7 +25,7 @@ class m180101_073718_create_medicine_record_table extends Migration
             'origin' => $this->string()->notNull()->defaultValue("")->comment("产地"),
             'created_at' => $this->dateTime()->notNull()->defaultValue("1000-01-01 00:00:00")->comment("创建时间"),
             'updated_at' => $this->dateTime()->notNull()->defaultValue("1000-01-01 00:00:00")->comment("最近一次修改时间"),
-        ]);
+        ], 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB');
     }
 
     /**

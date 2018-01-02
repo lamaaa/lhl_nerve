@@ -21,7 +21,8 @@ class m180102_143716_create_medicine_statistics_table extends Migration
             'created_at' => $this->dateTime()->notNull()->defaultValue("1000-01-01 00:00:00")->comment("创建时间"),
             'updated_at' => $this->dateTime()->notNull()->defaultValue("1000-01-01 00:00:00")->comment("最近一次修改时间"),
             'status' => $this->smallInteger(6)->notNull()->defaultValue(1)->comment("有效性 0为无效 1为有效"),
-        ]);
+        ], 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB');
+        $this->createIndex('medicine_id', 'medicine_statistics', 'medicine_id');
     }
 
     /**
