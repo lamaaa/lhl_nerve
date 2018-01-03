@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model) {
                                     return $model['type'] == 1 ? '入库' : '出库';
                                 }
-                                
+
                             ],
                             [
                                 'attribute' => 'created_at',
