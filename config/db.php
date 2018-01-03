@@ -10,7 +10,7 @@ return [
     'class' => 'yii\db\Connection',
     'dsn' => 'mysql:host=localhost;dbname=lhl_nerve',
     'username' => 'root',
-    'password' => '',
+    'password' => '@Yang20180113',
     'charset' => 'utf8',
 
     // Schema cache options (for production environment)
