@@ -87,7 +87,7 @@ class MedicineController extends Controller
         }
 
         $model->status = 0;
-        if ($model->save()) {
+        if ($model->update()) {
             return $this->redirect(Url::toRoute('medicine/index'));
         } else {
             throw new HttpException(500, "服务器出了点小问题，请稍等");

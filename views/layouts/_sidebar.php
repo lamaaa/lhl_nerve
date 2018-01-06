@@ -19,8 +19,8 @@ use yii\bootstrap\Nav;
             'url' => ['medicine/statistics']
         ],
         [
-            'label' => '系统管理',
-            'url' => ['site/management']
+            'label' => '用户管理',
+            'url' => ['user/index']
         ]
     ],
     'options' => ['class' => 'flex-column nav-pills']

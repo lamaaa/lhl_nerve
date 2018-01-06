@@ -24,6 +24,25 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             'username' => '用户名',
             'password' => '密码',
+            'id' => '用户ID',
+            'email' => '邮箱',
+            'created_at' => '创建时间'
+        ];
+    }
+
+    public function rules()
+    {
+        return [
+            ['password', 'string', 'min' => 6, 'message' => '密码不能小于6位'],
+            ['email', 'filter', 'filter' => 'trim'],
+            ['email', 'email'],
+            ['email', 'string', 'max' => '255'],
+            ['username', function($attribute, $params) {
+                $username = User::findOne($this->id)['username'];
+                if ($username != $this->$attribute) {
+                    $this->addError($attribute, '不能修改用户名噢');
+                }
+            }]
         ];
     }
 
