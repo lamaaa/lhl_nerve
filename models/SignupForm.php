@@ -24,7 +24,14 @@ class SignupForm extends Model
         return [
             ['username', 'filter', 'filter' => 'trim'],
             ['username', 'required', 'message' => '用户名不能为空'],
-            ['username', 'unique', 'targetClass' => '\app\models\User', 'message' => '用户名已经存在'],
+            ['username', function ($attribute, $params) {
+                if (User::find()->where([
+                    'status' => 1,
+                    'username' => $this->$attribute
+                ])->one()) {
+                    $this->addError($attribute, '用户名已存在');
+                }
+            }],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['password', 'required', 'message' => '密码不能为空'],
@@ -34,7 +41,14 @@ class SignupForm extends Model
             ['email', 'required', 'message' => '邮箱不可以为空'],
             ['email', 'string', 'max' => '255'],
             ['email', 'email'],
-            ['email', 'unique', 'targetClass' => '\app\models\User', 'message' => '邮箱已经存在']
+            ['email', function ($attribute, $params) {
+                if (User::find()->where([
+                    'status' => 1,
+                    'email' => $this->$attribute
+                ])->one()) {
+                    $this->addError($attribute, '邮箱已经存在');
+                }
+            }]
         ];
     }
 
@@ -49,7 +63,7 @@ class SignupForm extends Model
             $user->created_at = $now;
             $user->updated_at = $now;
             $user->generateAuthKey();
-            if ($user->save()) {
+            if ($user->save(false)) {
                 return $user;
             }
         }

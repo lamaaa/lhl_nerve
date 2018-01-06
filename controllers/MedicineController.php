@@ -70,6 +70,7 @@ class MedicineController extends Controller
                 if (!MedicineStatistics::record($model->id, $model->quantity, MedicineStatistics::STORAGE)) {
                     throw new HttpException(500, "Server has a problem");
                 }
+                Yii::$app->session->setFlash('success', '入库成功');
                 return $this->redirect(Url::toRoute('medicine/index'));
             }
         }
@@ -88,6 +89,7 @@ class MedicineController extends Controller
 
         $model->status = 0;
         if ($model->update()) {
+            Yii::$app->session->setFlash('success', '删除成功');
             return $this->redirect(Url::toRoute('medicine/index'));
         } else {
             throw new HttpException(500, "服务器出了点小问题，请稍等");
@@ -114,6 +116,7 @@ class MedicineController extends Controller
                 if (!MedicineStatistics::record($model->id, $model->release_quantity, MedicineStatistics::RELEASE)) {
                     throw new HttpException(500, "Server has a problem");
                 }
+                Yii::$app->session->setFlash('success', '出库成功');
                 return $this->redirect(Url::toRoute('medicine/index'));
             }
         }

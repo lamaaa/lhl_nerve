@@ -22,8 +22,8 @@ class m171224_034117_create_user_table extends Migration
             'created_at' => $this->dateTime()->notNull()->defaultValue("1001-01-01 00:00:00")->comment("创建时间"),
             'updated_at' => $this->dateTime()->notNull()->defaultValue("1001-01-01 00:00:00")->comment("最近一次修改时间"),
         ], "CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB");
-        $this->createIndex('idx_user_username', 'user', 'username', true);
-        $this->createIndex('idx_user_email', 'user', 'email', true);
+        $this->createIndex('idx_user_username', 'user', 'username');
+        $this->createIndex('idx_user_email', 'user', 'email');
     }
 
     /**

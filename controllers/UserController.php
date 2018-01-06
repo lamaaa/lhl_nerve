@@ -48,7 +48,9 @@ class UserController extends Controller
     public function actionCreate()
     {
         $model = new SignupForm();
+
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
+            Yii::$app->session->setFlash('success', '添加成功');
             return $this->redirect(Url::toRoute('user/index'));
         }
 
@@ -67,6 +69,7 @@ class UserController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->save()) {
+                Yii::$app->session->setFlash('success', '更新成功');
                 return $this->redirect(Url::toRoute('user/index'));
             }
         }
@@ -89,6 +92,7 @@ class UserController extends Controller
 
         $model->status = 0;
         if ($model->update()) {
+            Yii::$app->session->setFlash('success', '删除成功');
             return $this->redirect(Url::toRoute('user/index'));
         } else {
             throw new HttpException(500, "服务器出了点小问题噢");
