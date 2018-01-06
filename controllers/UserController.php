@@ -78,6 +78,9 @@ class UserController extends Controller
 
     public function actionDelete($id)
     {
+        if (count(User::find()->where(['status' => 1])->all()) <= 1) {
+            return $this->redirect(Url::toRoute('user/index'));
+        }
         $model = User::findOne($id);
 
         if (!$model) {
