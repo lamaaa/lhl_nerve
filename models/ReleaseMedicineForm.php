@@ -20,6 +20,7 @@ class ReleaseMedicineForm extends Model
     {
         return [
             [['release_quantity'], 'trim'],
+            [['release_quantity'], 'required'],
             [['release_quantity'], 'integer', 'integerOnly' => true, 'min' => 0],
             [['release_quantity'], function ($attribute, $params) {
                 $medicine = Medicine::findOne($this->id);
