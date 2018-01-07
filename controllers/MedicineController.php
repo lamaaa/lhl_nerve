@@ -11,6 +11,8 @@ use app\models\Medicine;
 use app\models\MedicineStatistics;
 use app\models\ReleaseMedicineForm;
 use app\models\User;
+use app\models\WarningConfig;
+use app\models\WarningType;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
 use yii\filters\AccessControl;
@@ -116,6 +118,7 @@ class MedicineController extends Controller
                 if (!MedicineStatistics::record($model->id, $model->release_quantity, MedicineStatistics::RELEASE)) {
                     throw new HttpException(500, "Server has a problem");
                 }
+                $this->warn($medicine->quantity, $model->id);
                 Yii::$app->session->setFlash('success', '出库成功');
                 return $this->redirect(Url::toRoute('medicine/index'));
             }
@@ -124,6 +127,40 @@ class MedicineController extends Controller
         return $this->render('release', [
             'model' => $model
         ]);
+    }
+
+    public function warn($quantity, $medicineId)
+    {
+        $warningConfigModels = WarningConfig::find()->where([
+            'status' => 1,
+            'medicine_id' => $medicineId
+        ])->all();
+        foreach ($warningConfigModels as $warningConfigModel) {
+            if ($warningConfigModel['quantity'] >= $quantity) {
+                foreach (WarningConfig::getWarningTypes($warningConfigModel->id) as $warningType) {
+                    if ($warningType['name'] == 'email') {
+                        foreach (WarningConfig::getWarningUsers($warningConfigModel->id) as $warningUser) {
+                            $this->sendEmailTo($warningUser, [
+                                'quantity' => $quantity,
+                                'medicineId' => $medicineId
+                            ]);
+                        }
+                    }
+                    // 暂时只做email
+                }
+            }
+        }
+    }
+
+    public function sendEmailTo($warningUser, $options)
+    {
+        $medicine = Medicine::findOne($options['medicineId']);
+        $mail = Yii::$app->mail->compose();
+        $mail->setTo($warningUser['email']);
+        $mail->setFrom('lhl_nerve@163.com');
+        $mail->setSubject($medicine['medicine_name'] . "告警");
+        $mail->setTextBody($medicine['medicine_name'] . "在库仅剩" . $medicine['quantity'] . "。请尽快入库该药品！");
+        $mail->send();
     }
 
     public function actionStatistics()

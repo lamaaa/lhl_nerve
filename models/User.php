@@ -9,6 +9,7 @@
 namespace app\models;
 
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 use Yii;
 
@@ -106,5 +107,13 @@ class User extends ActiveRecord implements IdentityInterface
     public static function getUsernameById($id)
     {
         return User::findOne($id)['username'];
+    }
+
+    public static function forWidget()
+    {
+        $userRows = User::find()->select(['username', 'id'])->where([
+            'status' => 1
+        ])->all();
+        return ArrayHelper::map($userRows, 'id', 'username');
     }
 }

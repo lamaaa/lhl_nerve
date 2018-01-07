@@ -19,6 +19,10 @@ use yii\bootstrap\Nav;
             'url' => ['medicine/statistics']
         ],
         [
+            'label' => '预警配置',
+            'url' => ['warning-config/index']
+        ],
+        [
             'label' => '用户管理',
             'url' => ['user/index']
         ]
