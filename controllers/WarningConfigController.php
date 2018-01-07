@@ -13,6 +13,7 @@ use app\models\User;
 use app\models\WarningConfig;
 use app\models\WarningType;
 use yii\data\ArrayDataProvider;
+use yii\filters\AccessControl;
 use yii\helpers\Url;
 use yii\web\Controller;
 use Yii;
@@ -20,6 +21,22 @@ use yii\web\HttpException;
 
 class WarningConfigController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@']
+                    ]
+                ]
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
         $warningConfigs = [];
