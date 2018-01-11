@@ -16,6 +16,7 @@ return array(
     'yii\\' => array($vendorDir . '/yiisoft/yii2'),
     'phpDocumentor\\Reflection\\' => array($vendorDir . '/phpdocumentor/reflection-common/src', $vendorDir . '/phpdocumentor/type-resolver/src', $vendorDir . '/phpdocumentor/reflection-docblock/src'),
     'kartik\\select2\\' => array($vendorDir . '/kartik-v/yii2-widget-select2'),
+    'kartik\\daterange\\' => array($vendorDir . '/kartik-v/yii2-date-range'),
     'kartik\\base\\' => array($vendorDir . '/kartik-v/yii2-krajee-base'),
     'dosamigos\\datetimepicker\\' => array($vendorDir . '/2amigos/yii2-date-time-picker-widget/src'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),

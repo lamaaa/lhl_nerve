@@ -34,6 +34,7 @@ class ComposerStaticInit796d159e8b1c7e316a7e84826e5a35d3
         'k' => 
         array (
             'kartik\\select2\\' => 15,
+            'kartik\\daterange\\' => 17,
             'kartik\\base\\' => 12,
         ),
         'd' => 
@@ -127,6 +128,10 @@ class ComposerStaticInit796d159e8b1c7e316a7e84826e5a35d3
         'kartik\\select2\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-select2',
+        ),
+        'kartik\\daterange\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-date-range',
         ),
         'kartik\\base\\' => 
         array (

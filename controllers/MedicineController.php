@@ -51,15 +51,34 @@ class MedicineController extends Controller
 
     public function actionIndex()
     {
+        $medicineName = Yii::$app->request->get('medicine_name') ?? null;
+        $manufacturer = Yii::$app->request->get('manufacturer') ?? null;
+        $storageAt = Yii::$app->request->get('storage_at') ?? null;
+        $query = Medicine::find()->where(['status' => 1]);
+        if ($medicineName) {
+            $query = $query->andWhere(['medicine_name' => $medicineName]);
+        }
+        if ($manufacturer) {
+            $query = $query->andWhere(['manufacturer' => $manufacturer]);
+        }
+        if ($storageAt) {
+            $inputTime = explode('/', $storageAt);
+            $startAt = new \DateTime($inputTime[0]);
+            $endAt = new \DateTime($inputTime[1]);
+            $query = $query->andWhere(['between', 'created_at', $startAt->format('Y-m-d H:i:s'), $endAt->format('Y-m-d H:i:s')]);
+        }
         $dataProvider = new ActiveDataProvider([
-            'query' => Medicine::find()->where(['status' => 1]),
+            'query' => $query,
             'pagination' => [
                 'pageSize' => 15
             ]
         ]);
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider
+            'dataProvider' => $dataProvider,
+            'medicine_name' => $medicineName,
+            'manufacturer' => $manufacturer,
+            'storage_at' => $storageAt
         ]);
     }
 

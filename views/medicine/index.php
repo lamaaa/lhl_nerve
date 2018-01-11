@@ -8,6 +8,7 @@
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use kartik\daterange\DateRangePicker;
 
 $this->title = "药品管理";
 $this->params['breadcrumbs'][] = $this->title;
@@ -18,7 +19,32 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row">
             <?= $this->render('@app/views/layouts/_sidebar') ?>
             <div class="col-sm-10">
-                <?= Html::a('入库', Url::toRoute('medicine/storage'), ['class' => 'btn btn-success']) ?>
+                <div style="margin-bottom: 10px;">
+                    <?= Html::a('入库', Url::toRoute('medicine/storage'), ['class' => 'btn btn-success']) ?>
+                </div>
+                <?= Html::beginForm(Url::toRoute('medicine/index'), 'GET', ['class' => 'form-inline']) ?>
+                    <?= Html::label('药品名字:', 'medicine_name') ?>
+                    <?= Html::input('text', 'medicine_name', $medicine_name, ['class' => 'form-control', 'style' => 'margin-right: 20px;']) ?>
+                    <?= Html::label('出品商:', 'manufacturer') ?>
+                    <?= Html::input('text', 'manufacturer', $manufacturer, ['class' => 'form-control', 'style' => 'margin-right: 20px;']) ?>
+                    <?= Html::label('入库时间:', 'storage_at') ?>
+                    <?= DateRangePicker::widget([
+                        'name' => 'storage_at',
+                        'value' => $storage_at,
+                        'options' => [
+                            'style' => 'margin-right: 20px;',
+                            'class' => 'form-control'
+                        ],
+                        'pluginOptions' => [
+                            'locale' => [
+                                'format' => 'Y-M-d',
+                                'separator' => ' / '
+                            ]
+                        ]
+                    ]) ?>
+
+                    <?= Html::submitButton('搜索', ['class' => 'btn btn-primary']) ?>
+                <?= Html::endForm() ?>
                 <div style="margin-top: 20px;">
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
